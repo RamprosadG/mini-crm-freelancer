@@ -6,19 +6,21 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id        String   @id @default(uuid())
+  username  String
   email     String   @unique
   password  String
   clients   Client[]
+
+  @@map("user")
 }
 
 model Client {
@@ -30,4 +32,6 @@ model Client {
   notes     String?
   userId    String
   user      User     @relation(fields: [userId], references: [id])
+
+  @@map("client")
 }
