@@ -13,25 +13,126 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ProjectStatus {
+  PENDING      @map("Pending")
+  IN_PROGRESS  @map("In progress")
+  COMPLETED    @map("Completed")
+}
+
+enum ProjectPriority {
+  LOW       @map("Low")
+  MEDIUM    @map("Medium")
+  HIGH      @map("High")
+}
+
+enum LogInteractionType {
+  CALL     @map("Call")
+  EMAIL    @map("Email")
+  MEETING  @map("Meeting")
+}
+
+
 model User {
-  id        String   @id @default(uuid())
-  username  String
-  email     String   @unique
-  password  String
-  clients   Client[]
+  id       String    @id @default(uuid())
+  username String
+  email    String    @unique
+  password String
+
+  clients  Client[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("user")
 }
 
 model Client {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  email     String
+  email     String    @unique
   phone     String
   company   String?
   notes     String?
+
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  projects  Project[]
+  reminders Reminder[]
+  logs      Log[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  @@index([userId])
 
   @@map("client")
+}
+
+model Project {
+  id         String    @id @default(uuid())
+  title      String
+  details    String?
+  budget     Decimal?  @db.Decimal(10, 2)
+  deadline   DateTime?
+  status     ProjectStatus   @default(PENDING)
+  priority   ProjectPriority @default(LOW)
+  clientId   String
+  client     Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  reminders  Reminder[]
+  logs       Log[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  
+  @@unique([title, clientId])
+  @@index([clientId])
+  @@index([status])
+  @@index([priority])
+
+  @@map("project")
+}
+
+model Reminder {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  dueDate     DateTime
+  isCompleted Boolean  @default(false)
+
+  clientId    String?
+  projectId   String?
+
+  client      Client?   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  project     Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([clientId])
+  @@index([projectId])
+
+  @@map("reminder")
+}
+
+model Log {
+  id              String    @id @default(uuid())
+  date            DateTime
+  interactionType LogInteractionType
+  notes           String?
+
+  clientId        String?
+  projectId       String?
+
+  client          Client?   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  project         Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([clientId])
+  @@index([projectId])
+
+  @@map("log")
 }

@@ -1,26 +1,23 @@
-// src/routes/index.tsx
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
-import ProtectedLayout from '../components/layout/ProtectedLayout';
 import Dashboard from '../pages/dashboard/Dashboard';
 import Client from '../pages/client/Client';
 import Project from '../pages/project/Project';
-
-const isAuthenticated = () => !!localStorage.getItem('token'); // auth logic here
+import MainLayout from '../components/layout/MainLayout';
 
 const router = createBrowserRouter([
   {
     path: '/login',
-    element: isAuthenticated() ? <Navigate to="/dashboard" /> : <Login />,
+    element: <Login />,
   },
   {
     path: '/register',
-    element: isAuthenticated() ? <Navigate to="/dashboard" /> : <Register />,
+    element: <Register />,
   },
   {
     path: '/',
-    element: <ProtectedLayout />,
+    element: <MainLayout />,
     children: [
       {
         path: 'dashboard',

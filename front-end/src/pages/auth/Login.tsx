@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/store/hook';
 import { login } from '../../redux/features/auth/authSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const dispatch = useAppDispatch();
     const { isLoading } = useAppSelector((state) => state.auth);
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const navigate = useNavigate();
   
     const handleLogin = async (e: any) => {
       e.preventDefault();
@@ -18,6 +19,7 @@ const Login = () => {
       try {
         await dispatch(login(data)).unwrap();
         setErrorMessage("");
+        navigate("/dashboard");
       } catch(error) {
         console.log(error);
         setErrorMessage("Login Failed");
