@@ -1,10 +1,12 @@
-function App() {
+import { RouterProvider } from "react-router-dom";
+import router from "./routes/router";
 
+function App() {
   return (
-    <>
-      <div className='h-screen text-5xl flex justify-center items-center'>CRM Project</div>
-    </>
-  )
+    <div className="min-h-screen">
+        <RouterProvider router={router}></RouterProvider>
+    </div>
+  );
 }
 
 export default App
