@@ -7,6 +7,7 @@ import clientsReducer from "../features/clients/clientsSlice";
 import preferencesReducer from "../features/preferences/preferencesSlice";
 import projectsReducer from "../features/projects/projectSlice";
 import logsReducer from "../features/logs/logsSlice";
+import remindersReducer from "../features/reminders/remindersSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   clients: clientsReducer,
   projects: projectsReducer,
   logs: logsReducer,
+  reminders: remindersReducer,
 });
 
 const store = configureStore({
