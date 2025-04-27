@@ -23,7 +23,7 @@ const MainLayout = () => {
   }, [isLoggedIn, navigate])
 
   return (
-    <div>
+    <div className=''>
       <Header items={links} />
       <Sidebar items={links} />
       <main className="mx-4 md:mx-10 my-6">

@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import user from "../../assets/user.png";
-import { useAppDispatch, useAppSelector } from '../../redux/store/hook';
+import { useAppDispatch } from '../../redux/store/hook';
 import { logout } from '../../redux/features/auth/authSlice';
 import ThemeToggle from '../Theme/ThemeToggle';
+import { setSidebar } from '../../redux/features/preferences/preferencesSlice';
 
 type Link = {
   name: string;
@@ -25,20 +26,22 @@ const Header = ({ items }: HeaderProps) => {
   }
 
   const isActive = (path: string) => location.pathname === path;
-  
-  const theme = useAppSelector((state) => state.preferences.theme);
+
+  const handleSidebar = () => {
+    dispatch(setSidebar(true));
+  }
 
   return (
     <>
       {/* Header */}
-      <header className={` ${theme === "light" ? "bg-white" : "bg-gray-800"} shadow-md z-30 relative`}>
+      <header className="shadow-md shadow-gray-300 z-30 relative">
         <div className="mx-4 md:mx-10 py-3 flex items-center justify-between">
           {/* Left Side: Hamburger */}
           <div className="flex items-center gap-4">
             {/* Hamburger (Mobile) */}
             <button
               className="md:hidden text-gray-700 dark:text-gray-300"
-              
+              onClick={handleSidebar}
             >
               <Menu size={24} />
             </button>
@@ -46,9 +49,9 @@ const Header = ({ items }: HeaderProps) => {
             {/* Logo */}
             <Link
               to="/"
-              className="text-xl font-bold text-blue-600 dark:text-blue-400"
+              className="text-xl font-bold text-black dark:text-white"
             >
-              MiniCRM
+              MINI CRM
             </Link>
 
             {/* Desktop Nav */}
@@ -77,7 +80,7 @@ const Header = ({ items }: HeaderProps) => {
             <div className="relative">
               <button
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="focus:outline-none"
+                className="focus:outline-none cursor-pointer"
               >
                 <img
                   src={user}
@@ -86,9 +89,9 @@ const Header = ({ items }: HeaderProps) => {
                 />
               </button>
               {showProfileMenu && (
-                <div className="absolute right-0 mt-2 bg-white dark:bg-gray-700 shadow-lg rounded-md p-2 w-40 z-50">
+                <div className="absolute right-0 border border-gray-200 hover:bg-gray-400 bg-white dark:bg-gray-700 dark:hover:bg-gray-500 text-black dark:text-white shadow-lg rounded-md p-2 w-40 z-50">
                   <button
-                    className="text-sm text-left w-full text-gray-700 dark:text-gray-200 hover:text-red-500"
+                    className="cursor-pointer text-sm text-left w-full text-gray-700 dark:text-gray-200 hover:text-white dark:hover:text-white"
                     onClick={
                       handleLogout
                     }

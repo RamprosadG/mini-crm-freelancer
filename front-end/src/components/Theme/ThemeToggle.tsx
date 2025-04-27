@@ -9,7 +9,6 @@ const ThemeToggle: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // On initial load, apply the dark class based on the redux state
     if (theme === "dark") {
       document.documentElement.classList.add('dark');
     } else {
@@ -19,14 +18,13 @@ const ThemeToggle: React.FC = () => {
 
   const toggleTheme = () => {
     console.log(theme);
-    // Toggle the theme in Redux state
     dispatch(setTheme(theme === "dark" ? "light" : "dark"));
   };
 
   return (
     <button
       onClick={toggleTheme}
-      className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+      className="text-black dark:text-white hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
     >
       {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
     </button>
