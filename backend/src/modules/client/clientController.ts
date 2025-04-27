@@ -27,7 +27,14 @@ export const createClientController = async (req: Request, res: Response) => {
 export const updateClientController = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const data = req.body;
+    const { name, email, phone, company, notes } = req.body;
+    const data = {
+      name,
+      email,
+      phone,
+      company,
+      notes,
+    };
 
     const updatedClient = await updateClient(id, data);
 

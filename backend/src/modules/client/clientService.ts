@@ -1,12 +1,13 @@
 import DB from "../../configs/dbConfig";
 
 export const createClient = async (data: any) => {
+  console.log("data", data);
   const existingClient = await DB.client.findFirst({
     where: {
       email: data.email,
     },
   });
-
+  console.log("ex: ", existingClient);
   if (existingClient) {
     throw new Error("Client with the same email already exists.");
   }
@@ -16,6 +17,7 @@ export const createClient = async (data: any) => {
 };
 
 export const updateClient = async (id: string, data: any) => {
+  console.log(data);
   const client = await DB.client.update({
     where: { id },
     data,

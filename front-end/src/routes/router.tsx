@@ -2,9 +2,13 @@ import { createBrowserRouter } from 'react-router-dom';
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import Dashboard from '../pages/dashboard/Dashboard';
-import Client from '../pages/client/Client';
-import Project from '../pages/project/Project';
+import Client from '../pages/client/ClientList';
+import Project from '../pages/project/ProjectList';
 import MainLayout from '../components/layout/MainLayout';
+import AddOrUpdateClient from '../pages/client/AddOrUpdateClient';
+import ClientDetails from '../pages/client/ClientDetails';
+import AddProject from '../pages/project/AddProject';
+import ProjectDetails from '../pages/project/projectDetails';
 
 const router = createBrowserRouter([
   {
@@ -20,16 +24,42 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: 'dashboard',
+        index: true,
         element: <Dashboard />,
       },
       {
         path: 'client',
-        element: <Client />,
+        children: [
+          {
+            index: true,
+            element: <Client />,
+          },
+          {
+            path: 'add-or-update',
+            element: <AddOrUpdateClient />,
+          },
+          {
+            path: 'details',
+            element: <ClientDetails />
+          }
+        ],
       },
       {
         path: 'project',
-        element: <Project />,
+        children: [
+          {
+            index: true,
+            element: <Project />
+          },
+          {
+            path: "add-new",
+            element: <AddProject />
+          }, 
+          {
+            path: "details",
+            element: <ProjectDetails />
+          }
+        ]
       },
     ],
   },

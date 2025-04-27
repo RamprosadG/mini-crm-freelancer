@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { performCheckLogin, performLogin, performRegister } from "./authApi";
+import axiosInstance from "../../../libs/axiosInstance";
 
 interface User {
   id: string;
@@ -23,13 +23,10 @@ const initialState: AuthState = {
 
 export const login = createAsyncThunk(
   "auth/login",
-  async (
-    { email, password }: { email: string; password: string },
-    thunkApi
-  ) => {
+  async (payload: { email: string; password: string }, thunkApi) => {
     try {
-      const data = await performLogin(email, password);
-      return data;
+      const res = await axiosInstance.post("/api/auth/login", payload);
+      return res?.data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -39,28 +36,12 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   "auth/register",
   async (
-    {
-      username,
-      email,
-      password,
-    }: { username: string; email: string; password: string },
+    payload: { username: string; email: string; password: string },
     thunkApi
   ) => {
     try {
-      const data = await performRegister(username, email, password);
-      return data;
-    } catch (error) {
-      return thunkApi.rejectWithValue(error);
-    }
-  }
-);
-
-export const checkLogin = createAsyncThunk(
-  "auth/checkLogin",
-  async (_, thunkApi) => {
-    try {
-      const data = await performCheckLogin();
-      return data;
+      const res = await axiosInstance.post("/api/auth/register", payload);
+      return res?.data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -100,20 +81,6 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state) => {
         state.isLoading = false;
-      })
-
-      .addCase(checkLogin.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(checkLogin.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isLoggedIn = true;
-        state.user = action.payload.data;
-      })
-      .addCase(checkLogin.rejected, (state) => {
-        state.isLoading = false;
-        state.isLoggedIn = false;
-        state.user = null;
       });
   },
 });

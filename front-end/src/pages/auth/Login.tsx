@@ -19,7 +19,7 @@ const Login = () => {
       try {
         await dispatch(login(data)).unwrap();
         setErrorMessage("");
-        navigate("/dashboard");
+        navigate("/");
       } catch(error) {
         console.log(error);
         setErrorMessage("Login Failed");
